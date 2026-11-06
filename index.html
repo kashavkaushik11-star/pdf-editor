@@ -17,7 +17,7 @@ h1{font-size:19px;margin:0 auto 0 0;white-space:nowrap}button,.pick,select,input
 button,.pick{cursor:pointer}button:hover,.pick:hover{background:#f3f6fb}button.active,.primary{background:#2868df;color:#fff;border-color:#2868df}
 button:disabled{opacity:.45;cursor:not-allowed}.toolbar-group{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 #color{width:38px;height:36px;padding:3px}#fontSize{width:66px}#pages{display:grid;gap:22px;justify-content:center;padding:8px 0 30px}
-main{max-width:1200px;margin:20px auto;padding:0 12px}#welcome{text-align:center;background:#fff;border:2px dashed #b8c5d8;border-radius:16px;padding:48px 18px}
+main{max-width:1200px;margin:20px auto;padding:0 12px}#welcome{text-align:center;background:#fff;border:2px dashed #b8c5d8;border-radius:16px;padding:48px 18px;transition:.15s}#welcome.drag-over,main.drag-over{border-color:#2868df;background:#eaf1ff}#dropNotice{display:none;margin:10px auto;padding:12px;text-align:center;background:#eaf1ff;border:2px dashed #2868df;border-radius:10px;color:#174ea6}main.drag-over #dropNotice{display:block}
 .page{position:relative;background:#fff;box-shadow:0 3px 14px #0002;max-width:100%;overflow:hidden;touch-action:pan-y}
 .page canvas{display:block;max-width:100%;height:auto}.page .overlay{position:absolute;inset:0;width:100%;height:100%;touch-action:none}
 .page .overlay.tool-select{cursor:default}.hint{color:#667085;font-size:13px}.status{font-size:12px;color:#536174;min-width:100px}
@@ -50,7 +50,7 @@ footer{text-align:center;padding:25px;color:#667085}
 </header>
 <main>
 <section id="welcome" lang="hi"><h2>अपनी PDF यहाँ खोलें</h2><p>ऊपर “Open PDF” दबाएँ। फिर Edit Text, Select, Text, Draw, Highlight, Box या Whiteout टूल इस्तेमाल करें।</p><p class="hint">आपकी PDF इसी ब्राउज़र में प्रोसेस होती है। फाइल हमारे सर्वर पर अपलोड नहीं होती।</p></section>
-<div id="pages"></div>
+<div id="dropNotice">PDF यहाँ छोड़ें — फाइल खुल रही है…</div><div id="pages"></div>
 <section class="seo-content">
 <h2>Free Online PDF Editor – Edit, Annotate and Print PDF Files</h2>
 <p>Open a PDF in your browser and add text, draw freehand marks, highlight important areas, place boxes or cover unwanted content with a whiteout overlay. Select and reposition annotations, undo or redo changes, print the edited PDF directly, or download a copy.</p>
@@ -91,7 +91,14 @@ $('#bold').addEventListener('click',()=>{state.bold=!state.bold;$('#bold').class
 $('#italic').addEventListener('click',()=>{state.italic=!state.italic;$('#italic').classList.toggle('active',state.italic)});
 $('#zoomIn').onclick=()=>changeZoom(1.15);$('#zoomOut').onclick=()=>changeZoom(1/1.15);
 function changeZoom(f){state.zoom=Math.max(.5,Math.min(2.5,state.zoom*f));$('#zoomLabel').textContent=Math.round(state.zoom*100)+'%';document.querySelectorAll('.page').forEach((el,i)=>{el.style.width=(state.pages[i].baseWidth*state.zoom)+'px'})}
-$('#file').addEventListener('change',async e=>{const f=e.target.files&&e.target.files[0];if(!f)return;try{setStatus('Opening PDF…');state.pdfBytes=await f.arrayBuffer();state.sourceName=f.name;state.pdfJs=await pdfjsLib.getDocument({data:state.pdfBytes.slice(0)}).promise;state.pages=[];state.history=[];state.future=[];state.selected=null;$('#pages').innerHTML='';$('#welcome').hidden=true;for(let n=1;n<=state.pdfJs.numPages;n++)await renderPage(n);setTool('edit');updateHistoryButtons();setStatus(state.pdfJs.numPages+' page(s) ready')}catch(err){console.error(err);alert('PDF नहीं खुल सकी। कृपया valid और unprotected PDF चुनें।');setStatus('Could not open PDF')}});
+async function openPdfFile(f){if(!f)return;if(f.type!=='application/pdf'&&!/\.pdf$/i.test(f.name)){alert('कृपया केवल PDF फाइल ड्रॉप करें।');return}try{setStatus('Opening PDF…');state.pdfBytes=await f.arrayBuffer();state.sourceName=f.name||'document.pdf';state.pdfJs=await pdfjsLib.getDocument({data:state.pdfBytes.slice(0)}).promise;state.pages=[];state.history=[];state.future=[];state.selected=null;state.selectedPage=null;$('#pages').innerHTML='';$('#welcome').hidden=true;for(let n=1;n<=state.pdfJs.numPages;n++)await renderPage(n);setTool('edit');updateHistoryButtons();setStatus(state.pdfJs.numPages+' page(s) ready')}catch(err){console.error(err);alert('PDF नहीं खुल सकी। कृपया valid और unprotected PDF चुनें।');setStatus('Could not open PDF')}}
+$('#file').addEventListener('change',e=>{openPdfFile(e.target.files&&e.target.files[0]);e.target.value=''});
+// Allow dropping a PDF anywhere on the editor without opening it in the browser tab.
+let dragDepth=0;
+window.addEventListener('dragenter',e=>{e.preventDefault();dragDepth++;$('main').classList.add('drag-over');$('#welcome').classList.add('drag-over')});
+window.addEventListener('dragover',e=>{e.preventDefault();if(e.dataTransfer)e.dataTransfer.dropEffect='copy'});
+window.addEventListener('dragleave',e=>{e.preventDefault();dragDepth=Math.max(0,dragDepth-1);if(dragDepth===0){$('main').classList.remove('drag-over');$('#welcome').classList.remove('drag-over')}});
+window.addEventListener('drop',e=>{e.preventDefault();dragDepth=0;$('main').classList.remove('drag-over');$('#welcome').classList.remove('drag-over');const files=Array.from(e.dataTransfer?.files||[]);const file=files.find(x=>x.type==='application/pdf'||/\.pdf$/i.test(x.name));if(file)openPdfFile(file);else alert('कृपया PDF फाइल ड्रॉप करें।')});
 async function renderPage(n){const p=await state.pdfJs.getPage(n),viewport=p.getViewport({scale:1.5}),wrap=document.createElement('div');wrap.className='page';wrap.style.width=viewport.width+'px';
 const base=document.createElement('canvas');base.width=viewport.width;base.height=viewport.height;wrap.append(base);await p.render({canvasContext:base.getContext('2d'),viewport}).promise;
 const overlay=document.createElement('canvas');overlay.className='overlay tool-edit';overlay.width=viewport.width;overlay.height=viewport.height;wrap.append(overlay);$('#pages').append(wrap);
