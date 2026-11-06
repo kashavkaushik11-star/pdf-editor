@@ -102,7 +102,22 @@ async function getItems(p){
   }
   return out;
 }
-function itemAt(i,x,y){return (IC[i]||[]).find(t=>!t.done&&x>=t.x-2&&x<=t.x+t.w+2&&y>=t.y-2&&y<=t.y+t.h+2)}
+function itemAt(i,x,y){
+  const items=(IC[i]||[]).filter(t=>!t.done);
+  let best=null,dist=Infinity;
+  for(const t of items){
+    const dx=x<t.x?t.x-x:x>t.x+t.w?x-(t.x+t.w):0;
+    const dy=y<t.y?t.y-y:y>t.y+t.h?y-(t.y+t.h):0;
+    const d=Math.hypot(dx,dy);
+    if(d<dist){dist=d;best=t}
+  }
+  return dist<=Math.max(12,(best?.s||12)*.8)?best:null;
+}
+function pdfPoint(e,canvas){
+  const r=canvas.getBoundingClientRect();
+  return {x:((e.clientX-r.left)/Math.max(1,r.width))*canvas.width/zoom,
+          y:((e.clientY-r.top)/Math.max(1,r.height))*canvas.height/zoom};
+}
 function editItem(i,it){
   const pc=pgs[i].c,k=zoom;let bg=[255,255,255],dk=[0,0,0];
   try{
@@ -176,7 +191,7 @@ function bind(i){
   const o=pgs[i].o;o.style.cursor=tool==='select'?'default':(tool==='edit'||tool==='text')?'text':'crosshair';
   o.onpointerdown=e=>{
     if(document.activeElement&&document.activeElement.tagName==='TEXTAREA')document.activeElement.blur();
-    const x=e.offsetX/zoom,y=e.offsetY/zoom;o.setPointerCapture(e.pointerId);
+    const pt=pdfPoint(e,o),x=pt.x,y=pt.y;o.setPointerCapture(e.pointerId);
     const c=$('#col').value,s=+$('#sz').value;
     if(tool==='edit'){e.preventDefault();const a=hit(i,x,y);if(a&&a.t==='text')openText(i,a.x,a.y,a);else{const it=itemAt(i,x,y);if(it)editItem(i,it)}return}
     if(tool==='select'){const a=hit(i,x,y);const old=sel;sel=a?{i,a}:null;
@@ -187,8 +202,8 @@ function bind(i){
     else cur={i,a:{t:tool,c,s,x,y,w:0,h:0}};
   };
   o.onpointermove=e=>{
-    const x=e.offsetX/zoom,y=e.offsetY/zoom;
-    if(tool==='edit'){const hv=itemAt(i,x,y)||null;if(hv!==pgs[i].hv){pgs[i].hv=hv;redraw(i)}}
+    const pt=pdfPoint(e,o),x=pt.x,y=pt.y;
+    if(tool==='edit'){const hv=itemAt(i,x,y)||null;o.style.cursor=hv?'text':'default';if(hv!==pgs[i].hv){pgs[i].hv=hv;redraw(i)}}
     if(cur&&cur.i===i){const a=cur.a;if(a.t==='pen')a.pts.push([x,y]);else{a.w=x-a.x;a.h=y-a.y}redraw(i)}
     else if(drag){const a=drag.a;
       if(a.t==='pen')a.pts=a.pts.map(p=>[p[0]+x-drag.px,p[1]+y-drag.py]);
@@ -199,7 +214,7 @@ function bind(i){
     if(cur&&cur.i===i){const a=cur.a;if(a.t==='pen'||Math.abs(a.w)>2){anns[i].push(a);hist.push(i)}cur=null;redraw(i)}
     drag=null;
   };
-  o.ondblclick=e=>{if(tool!=='select')return;const a=hit(i,e.offsetX/zoom,e.offsetY/zoom);if(a&&a.t==='text')openText(i,a.x,a.y,a)};
+  o.ondblclick=e=>{if(tool!=='select')return;const pt=pdfPoint(e,o),a=hit(i,pt.x,pt.y);if(a&&a.t==='text')openText(i,a.x,a.y,a)};
 }
 document.addEventListener('keydown',e=>{
   if(e.target.tagName==='TEXTAREA')return;
