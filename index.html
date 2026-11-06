@@ -1,9 +1,61 @@
 <!doctype html>
-<html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Free Online PDF Editor</title><meta name="description" content="Free online PDF editor. Open PDF, draw, add text, highlight, whiteout and download. Files stay in your browser."><meta name="robots" content="index,follow"><link rel="canonical" href="https://onlinepdfeditor.devs.surf/"><style>
-*{box-sizing:border-box}body{margin:0;background:#eef1f6;color:#202938;font:15px system-ui,Arial}header{background:#fff;padding:14px 18px;display:flex;gap:9px;flex-wrap:wrap;align-items:center;box-shadow:0 1px 5px #0002;position:sticky;top:0;z-index:2}h1{font-size:20px;margin:0 auto 0 0}button,.pick,select,input{font:inherit;border:1px solid #cbd3df;border-radius:8px;padding:8px 11px;background:#fff;color:#202938}button,.pick{cursor:pointer}button.active,.primary{background:#2868df;color:white;border-color:#2868df}main{max-width:1050px;margin:24px auto;padding:0 14px}#welcome{text-align:center;background:white;border:2px dashed #b8c5d8;border-radius:16px;padding:48px 18px}#pages{display:grid;gap:22px;justify-content:center}.page{position:relative;background:#fff;box-shadow:0 3px 14px #0002;max-width:100%;overflow:hidden}.page canvas{display:block;max-width:100%;height:auto;touch-action:none}.hint{color:#667085;font-size:13px}footer{text-align:center;padding:25px;color:#667085}
+<html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Free Online PDF Editor – Edit, Annotate & Highlight PDF</title>
+<meta name="description" content="Use this free online PDF editor to annotate PDF files, add text, draw, highlight and cover content, then download your edited PDF. No sign-up required.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#2868df">
+<link rel="canonical" href="https://onlinepdfeditor.devs.surf/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Free Online PDF Editor – Annotate & Highlight PDF">
+<meta property="og:description" content="Open a PDF in your browser, add text, draw, highlight or cover areas, and download your annotated file.">
+<meta property="og:url" content="https://onlinepdfeditor.devs.surf/">
+<meta property="og:site_name" content="Online PDF Editor">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Free Online PDF Editor">
+<meta name="twitter:description" content="Annotate, draw, add text and highlight PDF files in your browser.">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"WebApplication",
+  "name":"Online PDF Editor",
+  "url":"https://onlinepdfeditor.devs.surf/",
+  "applicationCategory":"MultimediaApplication",
+  "operatingSystem":"Any",
+  "browserRequirements":"Requires a modern browser with JavaScript enabled",
+  "description":"A browser-based PDF annotation tool for adding text, drawing, highlighting and covering areas on PDF pages.",
+  "offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}
+}
+</script><style>
+*{box-sizing:border-box}body{margin:0;background:#eef1f6;color:#202938;font:15px system-ui,Arial}header{background:#fff;padding:14px 18px;display:flex;gap:9px;flex-wrap:wrap;align-items:center;box-shadow:0 1px 5px #0002;position:sticky;top:0;z-index:2}h1{font-size:20px;margin:0 auto 0 0}button,.pick,select,input{font:inherit;border:1px solid #cbd3df;border-radius:8px;padding:8px 11px;background:#fff;color:#202938}button,.pick{cursor:pointer}button.active,.primary{background:#2868df;color:white;border-color:#2868df}main{max-width:1050px;margin:24px auto;padding:0 14px}#welcome{text-align:center;background:white;border:2px dashed #b8c5d8;border-radius:16px;padding:48px 18px}#pages{display:grid;gap:22px;justify-content:center}.page{position:relative;background:#fff;box-shadow:0 3px 14px #0002;max-width:100%;overflow:hidden}.page canvas{display:block;max-width:100%;height:auto;touch-action:none}.hint{color:#667085;font-size:13px}.seo-content{margin:34px auto 20px;max-width:900px;background:#fff;padding:28px;border-radius:14px;line-height:1.7}.seo-content h2{margin-top:28px;line-height:1.3}.seo-content h2:first-child{margin-top:0}.seo-content h3{margin-bottom:5px}.feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}.feature-grid article{border:1px solid #e1e6ef;border-radius:10px;padding:14px}.feature-grid p{margin-bottom:0}.seo-content details{border-bottom:1px solid #e1e6ef;padding:12px 0}.seo-content summary{cursor:pointer;font-weight:600}.seo-content details p{margin-bottom:0}.policy-links{margin-top:25px}footer{text-align:center;padding:25px;color:#667085}
 </style></head><body>
 <header><h1>📄 Free Online PDF Editor</h1><label class="pick primary">Open PDF <input id="file" type="file" accept="application/pdf" hidden></label><button data-tool="draw" class="active">Draw</button><button data-tool="text">Add Text</button><button data-tool="highlight">Highlight</button><button data-tool="white">Whiteout</button><input id="color" type="color" value="#e53935" title="Color"><button id="undo">Undo</button><button id="download" class="primary">Download PDF</button></header>
-<main><section id="welcome"><h2>अपनी PDF यहाँ खोलें</h2><p>Open PDF दबाएँ या PDF फाइल चुनें। फिर Draw, Text, Highlight या Whiteout टूल इस्तेमाल करें।</p><p class="hint">आपकी PDF आपके ब्राउज़र में ही प्रोसेस होती है; सर्वर पर अपलोड नहीं होती।</p></section><div id="pages"></div></main><footer>Free Online PDF Editor · Files stay on your device</footer>
+<main>
+<section id="welcome"><h2>अपनी PDF यहाँ खोलें</h2><p>Open PDF दबाएँ या PDF फाइल चुनें। फिर Draw, Text, Highlight या Whiteout टूल इस्तेमाल करें।</p><p class="hint">आपकी PDF आपके ब्राउज़र में ही प्रोसेस होती है; PDF फाइल हमारे सर्वर पर अपलोड नहीं होती।</p></section>
+<div id="pages"></div>
+<section class="seo-content">
+<h2>Free Online PDF Editor – Edit and Annotate PDF Files</h2>
+<p>Online PDF Editor is a free browser-based tool for adding annotations to PDF documents. Open a PDF from your device, mark important information, add a text note, draw on a page, highlight a section or cover an area with a white box. When you finish, download the result as a PDF. No account or sign-up is required.</p>
+<div class="feature-grid">
+<article><h3>Add text to a PDF</h3><p>Place a short text note on a PDF page. Use this for labels, reminders, comments and simple additions.</p></article>
+<article><h3>Draw on PDF pages</h3><p>Use the draw tool to mark, circle or point out information on a document.</p></article>
+<article><h3>Highlight PDF content</h3><p>Highlight a paragraph, heading or important area so it is easier to review later.</p></article>
+<article><h3>Cover an area</h3><p>Use the whiteout tool to place a white rectangle over a visible area. This is a visual cover only, not secure redaction.</p></article>
+</div>
+<h2>How to edit a PDF online</h2>
+<ol><li>Choose <strong>Open PDF</strong> and select a PDF file from your device.</li><li>Select Draw, Add Text, Highlight or Whiteout from the toolbar.</li><li>Use your mouse, touchpad or touchscreen on the PDF page to add your annotation.</li><li>Select <strong>Download PDF</strong> to save the result to your device.</li></ol>
+<h2>Private, browser-based PDF workflow</h2>
+<p>Your selected PDF is read locally by your browser. The document is not sent to an Online PDF Editor upload server. The page loads PDF.js and pdf-lib libraries from a public CDN to display and create PDF files. Use a trusted device when working with confidential documents.</p>
+<h2>Important limitations</h2>
+<p>This tool is designed for visual annotations, not full editing of existing PDF text. The downloaded pages are rendered as images, so selectable text, links, forms, accessibility structure and some original PDF features may not be preserved. The Whiteout tool only covers content visually; it does not permanently remove hidden text or metadata. Do not use it as a secure redaction tool.</p>
+<h2>Frequently asked questions</h2>
+<details><summary>Is this online PDF editor free?</summary><p>Yes. You can open a PDF, use the available annotation tools and download the result without creating an account.</p></details>
+<details><summary>Do I need to install software?</summary><p>No installation is required. Use a modern browser with JavaScript enabled.</p></details>
+<details><summary>Is my PDF uploaded to a server?</summary><p>The selected PDF is processed in your browser and is not uploaded to this website's server. The page does load its PDF libraries from a public CDN.</p></details>
+<details><summary>Can I edit existing words in a PDF?</summary><p>This version adds text and visual annotations on top of PDF pages. It does not directly edit or replace the original selectable text.</p></details>
+<details><summary>Does Whiteout securely remove private information?</summary><p>No. Whiteout is a visual cover only. It does not securely erase underlying text, images or metadata. Use a dedicated redaction tool for sensitive information.</p></details>
+<details><summary>Will my downloaded PDF keep selectable text?</summary><p>In this version, pages are exported as images. Text in the output may not remain selectable or searchable.</p></details>
+<p class="policy-links"><a href="/privacy.html">Privacy information</a> · <a href="/how-to-edit-pdf.html">PDF editing guide</a></p>
+</section>
+</main><footer>Online PDF Editor · Free PDF annotation tool · Files stay on your device</footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script><script>
 pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 const $=s=>document.querySelector(s);let source=null,pdf=null,tool='draw',color='#e53935',history=[];
