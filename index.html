@@ -1,72 +1,144 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Free Online PDF Editor – Edit, Annotate & Highlight PDF</title>
-<meta name="description" content="Use this free online PDF editor to annotate PDF files, add text, draw, highlight and cover content, then download your edited PDF. No sign-up required.">
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Free Online PDF Editor – Edit, Annotate & Print PDF</title>
+<meta name="description" content="Edit and annotate PDF files online. Add text, draw, highlight, whiteout, select and move annotations, then print or download your edited PDF.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="theme-color" content="#2868df">
 <link rel="canonical" href="https://onlinepdfeditor.devs.surf/">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Free Online PDF Editor – Annotate & Highlight PDF">
-<meta property="og:description" content="Open a PDF in your browser, add text, draw, highlight or cover areas, and download your annotated file.">
-<meta property="og:url" content="https://onlinepdfeditor.devs.surf/">
-<meta property="og:site_name" content="Online PDF Editor">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Free Online PDF Editor">
-<meta name="twitter:description" content="Annotate, draw, add text and highlight PDF files in your browser.">
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"WebApplication",
-  "name":"Online PDF Editor",
-  "url":"https://onlinepdfeditor.devs.surf/",
-  "applicationCategory":"MultimediaApplication",
-  "operatingSystem":"Any",
-  "browserRequirements":"Requires a modern browser with JavaScript enabled",
-  "description":"A browser-based PDF annotation tool for adding text, drawing, highlighting and covering areas on PDF pages.",
-  "offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}
-}
-</script><style>
-*{box-sizing:border-box}body{margin:0;background:#eef1f6;color:#202938;font:15px system-ui,Arial}header{background:#fff;padding:14px 18px;display:flex;gap:9px;flex-wrap:wrap;align-items:center;box-shadow:0 1px 5px #0002;position:sticky;top:0;z-index:2}h1{font-size:20px;margin:0 auto 0 0}button,.pick,select,input{font:inherit;border:1px solid #cbd3df;border-radius:8px;padding:8px 11px;background:#fff;color:#202938}button,.pick{cursor:pointer}button.active,.primary{background:#2868df;color:white;border-color:#2868df}main{max-width:1050px;margin:24px auto;padding:0 14px}#welcome{text-align:center;background:white;border:2px dashed #b8c5d8;border-radius:16px;padding:48px 18px}#pages{display:grid;gap:22px;justify-content:center}.page{position:relative;background:#fff;box-shadow:0 3px 14px #0002;max-width:100%;overflow:hidden}.page canvas{display:block;max-width:100%;height:auto;touch-action:none}.hint{color:#667085;font-size:13px}.seo-content{margin:34px auto 20px;max-width:900px;background:#fff;padding:28px;border-radius:14px;line-height:1.7}.seo-content h2{margin-top:28px;line-height:1.3}.seo-content h2:first-child{margin-top:0}.seo-content h3{margin-bottom:5px}.feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}.feature-grid article{border:1px solid #e1e6ef;border-radius:10px;padding:14px}.feature-grid p{margin-bottom:0}.seo-content details{border-bottom:1px solid #e1e6ef;padding:12px 0}.seo-content summary{cursor:pointer;font-weight:600}.seo-content details p{margin-bottom:0}.policy-links{margin-top:25px}footer{text-align:center;padding:25px;color:#667085}
-</style></head><body>
-<header><h1>📄 Free Online PDF Editor</h1><label class="pick primary">Open PDF <input id="file" type="file" accept="application/pdf" hidden></label><button data-tool="draw" class="active">Draw</button><button data-tool="text">Add Text</button><button data-tool="highlight">Highlight</button><button data-tool="white">Whiteout</button><input id="color" type="color" value="#e53935" title="Color"><button id="undo">Undo</button><button id="download" class="primary">Download PDF</button></header>
+<meta property="og:type" content="website"><meta property="og:title" content="Free Online PDF Editor – Edit, Annotate & Print PDF">
+<meta property="og:description" content="Open a PDF, add or edit text overlays, draw, highlight, cover areas, print or download.">
+<meta property="og:url" content="https://onlinepdfeditor.devs.surf/"><meta property="og:site_name" content="Online PDF Editor">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#eef1f6;color:#202938;font:14px system-ui,Arial,sans-serif}
+header{background:#fff;padding:10px 14px;display:flex;gap:7px;flex-wrap:wrap;align-items:center;box-shadow:0 1px 5px #0002;position:sticky;top:0;z-index:5}
+h1{font-size:19px;margin:0 auto 0 0;white-space:nowrap}button,.pick,select,input{font:inherit;border:1px solid #cbd3df;border-radius:8px;padding:8px 10px;background:#fff;color:#202938}
+button,.pick{cursor:pointer}button:hover,.pick:hover{background:#f3f6fb}button.active,.primary{background:#2868df;color:#fff;border-color:#2868df}
+button:disabled{opacity:.45;cursor:not-allowed}.toolbar-group{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+#color{width:38px;height:36px;padding:3px}#fontSize{width:66px}#pages{display:grid;gap:22px;justify-content:center;padding:8px 0 30px}
+main{max-width:1200px;margin:20px auto;padding:0 12px}#welcome{text-align:center;background:#fff;border:2px dashed #b8c5d8;border-radius:16px;padding:48px 18px}
+.page{position:relative;background:#fff;box-shadow:0 3px 14px #0002;max-width:100%;overflow:hidden;touch-action:pan-y}
+.page canvas{display:block;max-width:100%;height:auto}.page .overlay{position:absolute;inset:0;width:100%;height:100%;touch-action:none}
+.page .overlay.tool-select{cursor:default}.hint{color:#667085;font-size:13px}.status{font-size:12px;color:#536174;min-width:100px}
+#zoomLabel{min-width:44px;text-align:center}.seo-content{margin:34px auto 20px;max-width:900px;background:#fff;padding:28px;border-radius:14px;line-height:1.7}
+.seo-content h2{margin-top:28px;line-height:1.3}.seo-content h2:first-child{margin-top:0}.seo-content h3{margin-bottom:5px}
+.feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}.feature-grid article{border:1px solid #e1e6ef;border-radius:10px;padding:14px}
+footer{text-align:center;padding:25px;color:#667085}
+@media(max-width:700px){header{position:relative}h1{width:100%;font-size:18px}.toolbar-group{width:100%}button,.pick,select{padding:8px;font-size:13px}main{margin:12px auto;padding:0 7px}.seo-content{padding:18px}}
+</style>
+</head>
+<body>
+<header>
+<h1>📄 Free Online PDF Editor</h1>
+<label class="pick primary">📂 Open PDF <input id="file" type="file" accept="application/pdf" hidden></label>
+<div class="toolbar-group" aria-label="Editing tools">
+<button data-tool="edit" class="active">✏️ Edit Text</button><button data-tool="select">Select</button><button data-tool="text">Text</button>
+<button data-tool="draw">Draw</button><button data-tool="highlight">Highlight</button><button data-tool="box">Box</button><button data-tool="white">Whiteout</button>
+</div>
+<div class="toolbar-group">
+<input id="color" type="color" value="#d71920" title="Text and drawing color" aria-label="Color">
+<input id="fontSize" type="number" min="6" max="96" value="18" title="Font size" aria-label="Font size">
+<select id="fontFamily" title="Font family"><option value="Helvetica">Arial / Sans</option><option value="TimesRoman">Times</option><option value="Courier">Courier</option></select>
+<button id="bold" title="Bold"><b>B</b></button><button id="italic" title="Italic"><i>I</i></button>
+<button id="undo" title="Undo">↶ Undo</button><button id="redo" title="Redo">↷ Redo</button>
+</div>
+<div class="toolbar-group">
+<button id="zoomOut">−</button><span id="zoomLabel">100%</span><button id="zoomIn">+</button>
+<button id="print" class="primary">🖨 Direct Print</button><button id="download" class="primary">⬇ Download PDF</button>
+</div><span id="status" class="status">Ready</span>
+</header>
 <main>
-<section id="welcome" lang="hi"><h2>अपनी PDF यहाँ खोलें</h2><p>Open PDF दबाएँ या PDF फाइल चुनें। फिर Draw, Text, Highlight या Whiteout टूल इस्तेमाल करें।</p><p class="hint">आपकी PDF आपके ब्राउज़र में ही प्रोसेस होती है; PDF फाइल हमारे सर्वर पर अपलोड नहीं होती।</p></section>
+<section id="welcome" lang="hi"><h2>अपनी PDF यहाँ खोलें</h2><p>ऊपर “Open PDF” दबाएँ। फिर Edit Text, Select, Text, Draw, Highlight, Box या Whiteout टूल इस्तेमाल करें।</p><p class="hint">आपकी PDF इसी ब्राउज़र में प्रोसेस होती है। फाइल हमारे सर्वर पर अपलोड नहीं होती।</p></section>
 <div id="pages"></div>
 <section class="seo-content">
-<h2>Free Online PDF Editor – Edit and Annotate PDF Files</h2>
-<p>Online PDF Editor is a free browser-based tool for adding annotations to PDF documents. Open a PDF from your device, mark important information, add a text note, draw on a page, highlight a section or cover an area with a white box. When you finish, download the result as a PDF. No account or sign-up is required.</p>
+<h2>Free Online PDF Editor – Edit, Annotate and Print PDF Files</h2>
+<p>Open a PDF in your browser and add text, draw freehand marks, highlight important areas, place boxes or cover unwanted content with a whiteout overlay. Select and reposition annotations, undo or redo changes, print the edited PDF directly, or download a copy.</p>
 <div class="feature-grid">
-<article><h3>Add text to a PDF</h3><p>Place a short text note on a PDF page. Use this for labels, reminders, comments and simple additions.</p></article>
-<article><h3>Draw on PDF pages</h3><p>Use the draw tool to mark, circle or point out information on a document.</p></article>
-<article><h3>Highlight PDF content</h3><p>Highlight a paragraph, heading or important area so it is easier to review later.</p></article>
-<article><h3>Cover an area</h3><p>Use the whiteout tool to place a white rectangle over a visible area. This is a visual cover only, not secure redaction.</p></article>
+<article><h3>Edit text visually</h3><p>Cover an existing area with whiteout and place replacement text over it. This is a visual edit; it does not rewrite the original embedded PDF text.</p></article>
+<article><h3>Add text and draw</h3><p>Place text notes and freehand marks on PDF pages. Choose color, font, size, bold and italic styles.</p></article>
+<article><h3>Highlight and box</h3><p>Mark important sections with transparent highlights or draw rectangular boxes around content.</p></article>
+<article><h3>Print or download</h3><p>Print the edited PDF directly from your browser or download the finished PDF file.</p></article>
 </div>
-<h2>How to edit a PDF online</h2>
-<ol><li>Choose <strong>Open PDF</strong> and select a PDF file from your device.</li><li>Select Draw, Add Text, Highlight or Whiteout from the toolbar.</li><li>Use your mouse, touchpad or touchscreen on the PDF page to add your annotation.</li><li>Select <strong>Download PDF</strong> to save the result to your device.</li></ol>
-<h2>Private, browser-based PDF workflow</h2>
-<p>Your selected PDF is read locally by your browser. The document is not sent to an Online PDF Editor upload server. The page loads PDF.js and pdf-lib libraries from a public CDN to display and create PDF files. Use a trusted device when working with confidential documents.</p>
+<h2>How to use this PDF editor</h2>
+<ol><li>Choose Open PDF and select a PDF from your device.</li><li>Select an editing tool and apply it to the page.</li><li>Use Select to move or delete an annotation.</li><li>Choose Undo or Redo to manage changes.</li><li>Click Direct Print or Download PDF when finished.</li></ol>
+<h2>Privacy and PDF quality</h2>
+<p>Your selected PDF is processed locally in your browser. The editor adds annotations to the existing PDF pages, retaining the original page dimensions and underlying page content wherever the PDF library supports it. PDF.js and pdf-lib are loaded from a public CDN.</p>
 <h2>Important limitations</h2>
-<p>This tool is designed for visual annotations, not full editing of existing PDF text. The downloaded pages are rendered as images, so selectable text, links, forms, accessibility structure and some original PDF features may not be preserved. The Whiteout tool only covers content visually; it does not permanently remove hidden text or metadata. Do not use it as a secure redaction tool.</p>
-<h2>Frequently asked questions</h2>
-<details><summary>Is this online PDF editor free?</summary><p>Yes. You can open a PDF, use the available annotation tools and download the result without creating an account.</p></details>
-<details><summary>Do I need to install software?</summary><p>No installation is required. Use a modern browser with JavaScript enabled.</p></details>
-<details><summary>Is my PDF uploaded to a server?</summary><p>The selected PDF is processed in your browser and is not uploaded to this website's server. The page does load its PDF libraries from a public CDN.</p></details>
-<details><summary>Can I edit existing words in a PDF?</summary><p>This version adds text and visual annotations on top of PDF pages. It does not directly edit or replace the original selectable text.</p></details>
-<details><summary>Does Whiteout securely remove private information?</summary><p>No. Whiteout is a visual cover only. It does not securely erase underlying text, images or metadata. Use a dedicated redaction tool for sensitive information.</p></details>
-<details><summary>Will my downloaded PDF keep selectable text?</summary><p>In this version, pages are exported as images. Text in the output may not remain selectable or searchable.</p></details>
-<p class="policy-links"><a href="/about.html">About</a> · <a href="/how-to-edit-pdf.html">PDF editing guide</a> · <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a> · <a href="/contact.html">Contact</a></p>
+<p>Edit Text works by covering the old visible text and placing new text on top; it does not modify the original embedded text objects. Whiteout is a visual cover, not secure redaction. Hidden text, metadata or underlying content may remain. Always use a dedicated redaction tool before sharing sensitive documents.</p>
+<p><a href="/about.html">About</a> · <a href="/how-to-edit-pdf.html">PDF editing guide</a> · <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a> · <a href="/contact.html">Contact</a></p>
 </section>
-</main><footer>Online PDF Editor · Free PDF annotation tool · Files stay on your device</footer>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script><script>
+</main>
+<footer>Online PDF Editor · Free PDF editing and annotation tool · Files stay on your device</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script>
+'use strict';
 pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-const $=s=>document.querySelector(s);let source=null,pdf=null,tool='draw',color='#e53935',history=[];
-document.querySelectorAll('[data-tool]').forEach(b=>b.onclick=()=>{tool=b.dataset.tool;document.querySelectorAll('[data-tool]').forEach(x=>x.classList.toggle('active',x===b))});
-$('#color').oninput=e=>color=e.target.value;
-$('#file').onchange=async e=>{const f=e.target.files[0];if(!f)return;source=await f.arrayBuffer();pdf=await pdfjsLib.getDocument({data:source.slice(0)}).promise;$('#welcome').hidden=true;$('#pages').innerHTML='';history=[];for(let n=1;n<=pdf.numPages;n++)await renderPage(n)};
-async function renderPage(n){const p=await pdf.getPage(n),v=p.getViewport({scale:1.35}),wrap=document.createElement('div');wrap.className='page';const c=document.createElement('canvas');c.width=v.width;c.height=v.height;wrap.append(c);$('#pages').append(wrap);await p.render({canvasContext:c.getContext('2d'),viewport:v}).promise;const ctx=c.getContext('2d');let start=null,active=false;
-c.onpointerdown=e=>{const r=c.getBoundingClientRect(),x=(e.clientX-r.left)*c.width/r.width,y=(e.clientY-r.top)*c.height/r.height;start={x,y};active=true;c.setPointerCapture(e.pointerId);if(tool==='text'){const t=prompt('अपना टेक्स्ट लिखें');if(t){history.push({n,data:c.toDataURL()});ctx.fillStyle=color;ctx.font='24px Arial';ctx.fillText(t,x,y)}active=false}};
-c.onpointerup=e=>{if(!active||!start)return;active=false;const r=c.getBoundingClientRect(),x=(e.clientX-r.left)*c.width/r.width,y=(e.clientY-r.top)*c.height/r.height;history.push({n,data:null});ctx.save();if(tool==='draw'){ctx.strokeStyle=color;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(start.x,start.y);ctx.lineTo(x,y);ctx.stroke()}else if(tool==='highlight'){ctx.fillStyle=color+'66';ctx.fillRect(start.x,start.y,x-start.x,y-start.y)}else if(tool==='white'){ctx.fillStyle='#fff';ctx.fillRect(start.x,start.y,x-start.x,y-start.y)}ctx.restore();};
-c.onpointermove=e=>{if(!active||tool!=='draw')return;const r=c.getBoundingClientRect(),x=(e.clientX-r.left)*c.width/r.width,y=(e.clientY-r.top)*c.height/r.height;ctx.strokeStyle=color;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(start.x,start.y);ctx.lineTo(x,y);ctx.stroke();start={x,y}};
+const $=s=>document.querySelector(s);
+const state={pdfBytes:null,pdfJs:null,sourceName:'document.pdf',tool:'edit',color:'#d71920',fontSize:18,fontFamily:'Helvetica',bold:false,italic:false,zoom:1,pages:[],history:[],future:[],selected:null,drag:null};
+const setStatus=t=>$('#status').textContent=t;
+const clone=o=>JSON.parse(JSON.stringify(o));
+function snapshot(){return state.pages.map(p=>clone(p.items))}
+function commit(){state.history.push(snapshot());if(state.history.length>80)state.history.shift();state.future=[];updateHistoryButtons()}
+function updateHistoryButtons(){$('#undo').disabled=!state.history.length;$('#redo').disabled=!state.future.length}
+function setTool(t){state.tool=t;document.querySelectorAll('[data-tool]').forEach(b=>b.classList.toggle('active',b.dataset.tool===t));document.querySelectorAll('.overlay').forEach(c=>c.className='overlay tool-'+t)}
+document.querySelectorAll('[data-tool]').forEach(b=>b.addEventListener('click',()=>setTool(b.dataset.tool)));
+$('#color').addEventListener('input',e=>state.color=e.target.value);
+$('#fontSize').addEventListener('change',e=>state.fontSize=Math.max(6,Math.min(96,Number(e.target.value)||18)));
+$('#fontFamily').addEventListener('change',e=>state.fontFamily=e.target.value);
+$('#bold').addEventListener('click',()=>{state.bold=!state.bold;$('#bold').classList.toggle('active',state.bold)});
+$('#italic').addEventListener('click',()=>{state.italic=!state.italic;$('#italic').classList.toggle('active',state.italic)});
+$('#zoomIn').onclick=()=>changeZoom(1.15);$('#zoomOut').onclick=()=>changeZoom(1/1.15);
+function changeZoom(f){state.zoom=Math.max(.5,Math.min(2.5,state.zoom*f));$('#zoomLabel').textContent=Math.round(state.zoom*100)+'%';document.querySelectorAll('.page').forEach((el,i)=>{el.style.width=(state.pages[i].baseWidth*state.zoom)+'px'})}
+$('#file').addEventListener('change',async e=>{const f=e.target.files&&e.target.files[0];if(!f)return;try{setStatus('Opening PDF…');state.pdfBytes=await f.arrayBuffer();state.sourceName=f.name;state.pdfJs=await pdfjsLib.getDocument({data:state.pdfBytes.slice(0)}).promise;state.pages=[];state.history=[];state.future=[];state.selected=null;$('#pages').innerHTML='';$('#welcome').hidden=true;for(let n=1;n<=state.pdfJs.numPages;n++)await renderPage(n);setTool('edit');updateHistoryButtons();setStatus(state.pdfJs.numPages+' page(s) ready')}catch(err){console.error(err);alert('PDF नहीं खुल सकी। कृपया valid और unprotected PDF चुनें।');setStatus('Could not open PDF')}});
+async function renderPage(n){const p=await state.pdfJs.getPage(n),viewport=p.getViewport({scale:1.5}),wrap=document.createElement('div');wrap.className='page';wrap.style.width=viewport.width+'px';
+const base=document.createElement('canvas');base.width=viewport.width;base.height=viewport.height;wrap.append(base);await p.render({canvasContext:base.getContext('2d'),viewport}).promise;
+const overlay=document.createElement('canvas');overlay.className='overlay tool-edit';overlay.width=viewport.width;overlay.height=viewport.height;wrap.append(overlay);$('#pages').append(wrap);
+const dims={width:viewport.width,height:viewport.height,pdfWidth:p.view[2]-p.view[0],pdfHeight:p.view[3]-p.view[1],baseWidth:viewport.width,items:[]};state.pages.push(dims);
+overlay.addEventListener('pointerdown',e=>pointerDown(e,n-1,overlay));overlay.addEventListener('pointermove',e=>pointerMove(e,n-1,overlay));overlay.addEventListener('pointerup',e=>pointerUp(e,n-1,overlay));overlay.addEventListener('dblclick',e=>{if(state.tool==='edit'||state.tool==='text')addTextAt(e,n-1,overlay)});
 }
-$('#undo').onclick=()=>{const h=history.pop();if(!h){alert('Undo के लिए कुछ नहीं है');return}if(h.data){const img=new Image();img.onload=()=>{const c=$('#pages').children[h.n-1].querySelector('canvas');c.getContext('2d').clearRect(0,0,c.width,c.height);c.getContext('2d').drawImage(img,0,0)};img.src=h.data}else alert('इस बदलाव को Undo करने के लिए PDF दोबारा खोलें।')};
-$('#download').onclick=async()=>{if(!pdf){alert('पहले PDF खोलें');return}const out=await PDFLib.PDFDocument.create();for(const el of $('#pages').children){const c=el.querySelector('canvas'),img=await out.embedPng(c.toDataURL('image/png')),page=out.addPage([c.width/1.35,c.height/1.35]);page.drawImage(img,{x:0,y:0,width:c.width/1.35,height:c.height/1.35})}const bytes=await out.save(),blob=new Blob([bytes],{type:'application/pdf'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='edited.pdf';a.click();URL.revokeObjectURL(a.href)};
-</script></body></html>
+function point(e,c){const r=c.getBoundingClientRect();return{x:(e.clientX-r.left)*c.width/r.width,y:(e.clientY-r.top)*c.height/r.height}}
+function pointerDown(e,pi,c){const p=point(e,c),items=state.pages[pi].items;state.drag={pi,start:p,last:p,points:[p],previewTool:state.tool};
+if(state.tool==='select'){const idx=findItem(pi,p);state.selected=idx;if(idx>=0){state.drag.item=idx;state.drag.original=clone(items[idx]);state.drag.moved=false}else state.selected=null;drawOverlay(pi);return}
+if(state.tool==='text'||state.tool==='edit'){if(state.tool==='edit'){const idx=findItem(pi,p);if(idx>=0){state.selected=idx;const item=items[idx];if(item.type==='text'){const val=prompt('टेक्स्ट बदलें:',item.text);if(val!==null){commit();item.text=val;drawOverlay(pi)}return}if(item.type==='white'){const val=prompt('नया टेक्स्ट लिखें:');if(val){commit();items.push(makeText(p,val));drawOverlay(pi)}return}}}
+if(state.tool==='text'||state.tool==='edit'){addTextAt(e,pi,c);state.drag=null}return}
+c.setPointerCapture(e.pointerId)}
+function pointerMove(e,pi,c){const d=state.drag;if(!d||d.pi!==pi)return;const p=point(e,c);d.last=p;
+if(state.tool==='draw'){d.points.push(p);drawOverlay(pi,true)}
+else if(state.tool==='select'&&d.item!==undefined){const dx=p.x-d.start.x,dy=p.y-d.start.y;if(Math.abs(dx)+Math.abs(dy)>2)d.moved=true;drawOverlay(pi,true)}
+else drawOverlay(pi,true)}
+function pointerUp(e,pi,c){const d=state.drag;if(!d||d.pi!==pi)return;const p=point(e,c);state.drag=null;
+if(state.tool==='select'){if(d.item!==undefined&&d.moved){commit();moveItem(state.pages[pi].items[d.item],p.x-d.start.x,p.y-d.start.y);state.selected=d.item}drawOverlay(pi);return}
+if(state.tool==='draw'){if(d.points.length<2)d.points.push(p);commit();state.pages[pi].items.push({type:'draw',points:d.points,color:state.color,width:3})}
+else{const x=Math.min(d.start.x,p.x),y=Math.min(d.start.y,p.y),w=Math.abs(p.x-d.start.x),h=Math.abs(p.y-d.start.y);if(w<2||h<2){drawOverlay(pi);return}commit();state.pages[pi].items.push({type:state.tool==='highlight'?'highlight':state.tool==='box'?'box':'white',x,y,w,h,color:state.color})}
+drawOverlay(pi)}
+function moveItem(it,dx,dy){if(it.type==='draw')it.points=it.points.map(p=>({x:p.x+dx,y:p.y+dy}));else{it.x+=dx;it.y+=dy}}
+function findItem(pi,p){const a=state.pages[pi].items;for(let i=a.length-1;i>=0;i--){const it=a[i],x=it.type==='draw'?Math.min(...it.points.map(v=>v.x)):it.x,y=it.type==='draw'?Math.min(...it.points.map(v=>v.y)):it.y,w=it.type==='draw'?Math.max(...it.points.map(v=>v.x))-x:it.w,h=it.type==='draw'?Math.max(...it.points.map(v=>v.y))-y:it.h;if(p.x>=x-8&&p.x<=x+w+8&&p.y>=y-8&&p.y<=y+h+8)return i}return -1}
+function makeText(p,text){return{type:'text',x:p.x,y:p.y,text,color:state.color,size:state.fontSize,font:state.fontFamily,bold:state.bold,italic:state.italic}}
+function addTextAt(e,pi,c){const p=point(e,c),value=prompt('अपना टेक्स्ट लिखें:');if(value===null||!value.trim())return;commit();state.pages[pi].items.push(makeText(p,value));drawOverlay(pi)}
+function drawOverlay(pi,preview=false){const c=$('#pages').children[pi]?.querySelector('.overlay');if(!c)return;const ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);
+for(let i=0;i<state.pages[pi].items.length;i++){const it=state.pages[pi].items[i];ctx.save();if(it.type==='draw'){ctx.strokeStyle=it.color;ctx.lineWidth=it.width;ctx.lineCap='round';ctx.lineJoin='round';ctx.beginPath();it.points.forEach((p,j)=>j?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.stroke()}
+else if(it.type==='text'){ctx.fillStyle=it.color;ctx.font=(it.italic?'italic ':'')+(it.bold?'bold ':'')+it.size+'px '+(it.font==='TimesRoman'?'serif':it.font==='Courier'?'monospace':'Arial');ctx.fillText(it.text,it.x,it.y)}
+else if(it.type==='white'){ctx.fillStyle='#fff';ctx.fillRect(it.x,it.y,it.w,it.h)}
+else if(it.type==='highlight'){ctx.fillStyle=it.color+'55';ctx.fillRect(it.x,it.y,it.w,it.h)}
+else if(it.type==='box'){ctx.strokeStyle=it.color;ctx.lineWidth=2;ctx.strokeRect(it.x,it.y,it.w,it.h)}
+if(state.selected===i&&state.tool==='select'){ctx.strokeStyle='#2868df';ctx.lineWidth=2;ctx.setLineDash([5,3]);if(it.type==='draw'){const xs=it.points.map(p=>p.x),ys=it.points.map(p=>p.y);ctx.strokeRect(Math.min(...xs)-5,Math.min(...ys)-5,Math.max(...xs)-Math.min(...xs)+10,Math.max(...ys)-Math.min(...ys)+10)}else ctx.strokeRect(it.x-4,it.y-4,it.w||Math.max(40,it.text.length*10),it.h||28)}ctx.restore()}
+if(preview&&state.drag&&state.drag.pi===pi){const d=state.drag;ctx.save();if(state.tool==='draw'){ctx.strokeStyle=state.color;ctx.lineWidth=3;ctx.beginPath();d.points.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.stroke()}else if(state.tool!=='select'){ctx.strokeStyle=state.color;ctx.setLineDash([4,3]);ctx.strokeRect(d.start.x,d.start.y,d.last.x-d.start.x,d.last.y-d.start.y)}ctx.restore()}}
+$('#undo').onclick=()=>{if(!state.history.length)return;state.future.push(snapshot());const prev=state.history.pop();state.pages.forEach((p,i)=>p.items=prev[i]||[]);state.selected=null;state.pages.forEach((p,i)=>drawOverlay(i));updateHistoryButtons();setStatus('Undo')};
+$('#redo').onclick=()=>{if(!state.future.length)return;state.history.push(snapshot());const next=state.future.pop();state.pages.forEach((p,i)=>p.items=next[i]||[]);state.selected=null;state.pages.forEach((p,i)=>drawOverlay(i));updateHistoryButtons();setStatus('Redo')};
+document.addEventListener('keydown',e=>{if((e.key==='Delete'||e.key==='Backspace')&&state.tool==='select'&&state.selected!==null){const pi=state.pages.findIndex((p,i)=>state.pages[i].items[state.selected]);if(pi>=0){commit();state.pages[pi].items.splice(state.selected,1);state.selected=null;drawOverlay(pi)}}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'){e.preventDefault();$('#undo').click()}});
+async function buildPdf(){if(!state.pdfBytes)throw new Error('पहले PDF खोलें');const out=await PDFLib.PDFDocument.load(state.pdfBytes.slice(0));const pages=out.getPages();for(let i=0;i<pages.length;i++){const page=pages[i],dims=state.pages[i],sx=dims.pdfWidth/dims.width,sy=dims.pdfHeight/dims.height;for(const it of dims.items){const x=(it.x||0)*sx,y=dims.pdfHeight-(it.y||0)*sy; if(it.type==='white')page.drawRectangle({x,y: y-it.h*sy,width:it.w*sx,height:it.h*sy,color:PDFLib.rgb(1,1,1)});
+else if(it.type==='highlight'){const c=hexRgb(it.color);page.drawRectangle({x,y:y-it.h*sy,width:it.w*sx,height:it.h*sy,color:PDFLib.rgb(c.r,c.g,c.b),opacity:.32,borderOpacity:0})}
+else if(it.type==='box'){const c=hexRgb(it.color);page.drawRectangle({x,y:y-it.h*sy,width:it.w*sx,height:it.h*sy,borderColor:PDFLib.rgb(c.r,c.g,c.b),borderWidth:1.5*sx,opacity:0})}
+else if(it.type==='text'){const font=await out.embedFont(fontName(it.font,it.bold,it.italic));const c=hexRgb(it.color);page.drawText(it.text,{x,y:y-it.size*sy*.8,size:it.size*sy,font,color:PDFLib.rgb(c.r,c.g,c.b)})}
+else if(it.type==='draw'){const c=hexRgb(it.color);for(let j=1;j<it.points.length;j++){const a=it.points[j-1],b=it.points[j];page.drawLine({start:{x:a.x*sx,y:dims.pdfHeight-a.y*sy},end:{x:b.x*sx,y:dims.pdfHeight-b.y*sy},thickness:it.width*sx,color:PDFLib.rgb(c.r,c.g,c.b)})}}}}
+return await out.save()}
+function fontName(f,b,i){if(f==='TimesRoman')return b?(i?'TimesRomanBoldItalic':'TimesRomanBold'):(i?'TimesRomanItalic':'TimesRoman');if(f==='Courier')return b?(i?'CourierBoldOblique':'CourierBold'):(i?'CourierOblique':'Courier');return b?(i?'HelveticaBoldOblique':'HelveticaBold'):(i?'HelveticaOblique':'Helvetica')}
+function hexRgb(h){const n=parseInt(h.slice(1),16);return{r:((n>>16)&255)/255,g:((n>>8)&255)/255,b:(n&255)/255}}
+async function outputBlob(){setStatus('Preparing edited PDF…');const bytes=await buildPdf();return new Blob([bytes],{type:'application/pdf'})}
+$('#download').onclick=async()=>{try{const blob=await outputBlob(),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='edited-'+state.sourceName.replace(/\.pdf$/i,'')+'.pdf';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);setStatus('PDF downloaded')}catch(e){console.error(e);alert(e.message||'PDF export failed');setStatus('Export failed')}};
+$('#print').onclick=async()=>{try{const blob=await outputBlob(),url=URL.createObjectURL(blob),frame=document.createElement('iframe');frame.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0';frame.src=url;document.body.append(frame);frame.onload=()=>{try{frame.contentWindow.focus();frame.contentWindow.print();setStatus('Print dialog opened')}catch(e){window.open(url,'_blank');setStatus('PDF opened for printing')}setTimeout(()=>{URL.revokeObjectURL(url);frame.remove()},120000)}}catch(e){console.error(e);alert(e.message||'Print preparation failed');setStatus('Print failed')}};
+setTool('edit');updateHistoryButtons();
+</script>
+</body></html>
