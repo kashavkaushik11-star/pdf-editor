@@ -172,11 +172,12 @@ function openTextOld(i,x,y,old){
   ta.onblur=fin;ta.onkeydown=e=>{if(e.key==='Escape'||(e.key==='Enter'&&(e.ctrlKey||e.metaKey)))ta.blur()};
   pgs[i].d.append(ta);setTimeout(()=>ta.focus(),0);
 }
+function point(e,o){const r=o.getBoundingClientRect();return{x:(e.clientX-r.left)*(o.width/r.width)/zoom,y:(e.clientY-r.top)*(o.height/r.height)/zoom}}
 function bind(i){
   const o=pgs[i].o;o.style.cursor=tool==='select'?'default':(tool==='edit'||tool==='text')?'text':'crosshair';
   o.onpointerdown=e=>{
     if(document.activeElement&&document.activeElement.tagName==='TEXTAREA')document.activeElement.blur();
-    const x=e.offsetX/zoom,y=e.offsetY/zoom;o.setPointerCapture(e.pointerId);
+    const {x,y}=point(e,o);o.setPointerCapture(e.pointerId);
     const c=$('#col').value,s=+$('#sz').value;
     if(tool==='edit'){e.preventDefault();const a=hit(i,x,y);if(a&&a.t==='text')openText(i,a.x,a.y,a);else{const it=itemAt(i,x,y);if(it)editItem(i,it)}return}
     if(tool==='select'){const a=hit(i,x,y);const old=sel;sel=a?{i,a}:null;
@@ -187,7 +188,7 @@ function bind(i){
     else cur={i,a:{t:tool,c,s,x,y,w:0,h:0}};
   };
   o.onpointermove=e=>{
-    const x=e.offsetX/zoom,y=e.offsetY/zoom;
+    const {x,y}=point(e,o);
     if(tool==='edit'){const hv=itemAt(i,x,y)||null;if(hv!==pgs[i].hv){pgs[i].hv=hv;redraw(i)}}
     if(cur&&cur.i===i){const a=cur.a;if(a.t==='pen')a.pts.push([x,y]);else{a.w=x-a.x;a.h=y-a.y}redraw(i)}
     else if(drag){const a=drag.a;
@@ -199,7 +200,7 @@ function bind(i){
     if(cur&&cur.i===i){const a=cur.a;if(a.t==='pen'||Math.abs(a.w)>2){anns[i].push(a);hist.push(i)}cur=null;redraw(i)}
     drag=null;
   };
-  o.ondblclick=e=>{if(tool!=='select')return;const a=hit(i,e.offsetX/zoom,e.offsetY/zoom);if(a&&a.t==='text')openText(i,a.x,a.y,a)};
+  o.ondblclick=e=>{if(tool!=='select')return;const {x,y}=point(e,o);const a=hit(i,x,y);if(a&&a.t==='text')openText(i,a.x,a.y,a)};
 }
 document.addEventListener('keydown',e=>{
   if(e.target.tagName==='TEXTAREA')return;
