@@ -2,7 +2,7 @@
 
 Browser-based PDF editor: edit text, whiteout, draw, highlight, add boxes, print and download. Files are processed in your browser; no account is required.
 
-**Live website:** https://kashavkaushik11-star.github.io/pdf-editor/
+**Live website:** https://pdfeditor.devs.surf/
 
 ## Deploy
 This repository is configured for GitHub Pages using GitHub Actions. Push the contents of this folder to the `main` branch, then in **Settings → Pages**, select **GitHub Actions** as the build and deployment source.
