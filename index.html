@@ -115,9 +115,10 @@ function point(e,c){const r=c.getBoundingClientRect();return{x:(e.clientX-r.left
 function pointerDown(e,pi,c){const p=point(e,c),items=state.pages[pi].items;state.drag={pi,start:p,last:p,points:[p],previewTool:state.tool};
 if(state.tool==='select'){const idx=findItem(pi,p);state.selected=idx;state.selectedPage=pi;if(idx>=0){state.drag.item=idx;state.drag.original=clone(items[idx]);state.drag.moved=false}else state.selected=null;drawOverlay(pi);return}
 if(state.tool==='text'||state.tool==='edit'){if(state.tool==='edit'){const idx=findItem(pi,p);if(idx>=0){state.selected=idx;const item=items[idx];if(item.type==='text'){startInlineEditor(pi,c,item,'item');return}if(item.type==='white'){startInlineEditor(pi,c,{text:'',x:p.x,y:p.y,width:100,height:24,baseline:p.y+20},'source');return}}
-const original=state.pages[pi].sourceText.find(t=>p.x>=t.x-3&&p.x<=t.x+t.width+3&&p.y>=t.y-3&&p.y<=t.y+t.height+3);
-if(original){startInlineEditor(pi,c,original,'source');return}}
-if(state.tool==='text'||state.tool==='edit'){addTextAt(e,pi,c);state.drag=null}return}
+const candidates=state.pages[pi].sourceText.map(t=>{const dx=p.x<t.x? t.x-p.x:p.x>t.x+t.width?p.x-(t.x+t.width):0;const dy=p.y<t.y-4?t.y-4-p.y:p.y>t.y+t.height+4?p.y-(t.y+t.height+4):0;return{t,d:Math.hypot(dx,dy)}}).sort((a,b)=>a.d-b.d);
+const nearest=candidates[0];if(nearest&&nearest.d<34){startInlineEditor(pi,c,nearest.t,'source');return}
+startInlineEditor(pi,c,{text:'',x:p.x,y:p.y,width:90,height:24,baseline:p.y+20},'new');return}
+if(state.tool==='text'){addTextAt(e,pi,c);state.drag=null}return}
 c.setPointerCapture(e.pointerId)}
 function pointerMove(e,pi,c){const d=state.drag;if(!d||d.pi!==pi)return;const p=point(e,c);d.last=p;
 if(state.tool==='draw'){d.points.push(p);drawOverlay(pi,true)}
